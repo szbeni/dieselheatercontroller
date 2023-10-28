@@ -1,3 +1,4 @@
+
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
@@ -73,7 +74,7 @@ long lastVentStateReportTime = 0;
 int vent_on_time_sec = 300;
 int vent_state = 0;
 int switch_on_request = 0;
-int switch_off_request = 0;
+int switch_off_request = 1;
 int intensity_request = 0;
 int knob_request = 0;
 
@@ -167,6 +168,16 @@ void setup() {
 
 
 void loop() {
+  // Check WiFi connection periodically
+  while ( WiFi.status() != WL_CONNECTED) {
+    Serial.print("Attempting to connect to WEP network, SSID: ");
+    Serial.println(WIFI_SSID);
+    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+    // wait 10 seconds for connection:
+    delay(10000);
+  }
+  
   if (!mqttClient.connected()) {
     mqttReconnect();
   }

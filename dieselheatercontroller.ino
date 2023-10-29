@@ -53,12 +53,12 @@
 #define INPUT_CHECK_DELAY 500
 #define INPUT_NUM           4
 
-const char *WIFI_SSID = "********";
-const char *WIFI_PASSWORD = "********";
+const char *WIFI_SSID = "*****";
+const char *WIFI_PASSWORD = "*****";
 
 const char *MQTT_SERVER = "10.1.1.1";
-const char *MQTT_USER = "********";    // NULL for no authentication
-const char *MQTT_PASSWORD = "********"; // NULL for no authentication
+const char *MQTT_USER = "*****";    // NULL for no authentication
+const char *MQTT_PASSWORD = "*****"; // NULL for no authentication
 
 float humidity;
 float temperature;
@@ -77,6 +77,7 @@ int switch_on_request = 0;
 int switch_off_request = 1;
 int intensity_request = 0;
 int knob_request = 0;
+int mqtt_servo_angle = 0;
 
 
 int intensity = 0;

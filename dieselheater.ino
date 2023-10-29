@@ -57,6 +57,7 @@ void servo_loop()
 
   if (now - last_quick_run  > 100)
   {
+    //servo.write(mqtt_servo_angle); 
       if (vent_state == 1)
       {
         if(on_percent < 100)

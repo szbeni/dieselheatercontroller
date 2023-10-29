@@ -38,6 +38,14 @@ void mqttOnMessage(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
 
+  if (strstr(topic, "servoangle"))
+  {
+    int val = atoi((const char*)payload);
+    Serial.print("New servoa:");
+    Serial.println(val);
+    if (val > 0 and val < 600)
+      mqtt_servo_angle = val;
+  }
   if (strstr(topic, "ventontime"))
   {
     int val = atoi((const char*)payload);
@@ -48,6 +56,13 @@ void mqttOnMessage(char* topic, byte* payload, unsigned int length) {
   }
   if (strstr(topic, "turnonoff"))
   {
+    static int first_message = 1;
+    if (first_message)
+    {
+      first_message = 0;
+      Serial.print("Ignore first onoff message, todo: why this happens?\n");
+      return;
+    }
     if ((char)payload[0] == '0') {  
       turn_onoff(0);
     }

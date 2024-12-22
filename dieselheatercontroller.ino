@@ -25,7 +25,7 @@
 
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-#define BME280_ADDRESS 0x76
+//#define BME280_ADDRESS 0x76
 
 #define BUTTON_PRESS_DELAY  50
 
@@ -69,16 +69,16 @@ int prev_diesel_heater_state = 0;
 long lastDieselHeaterStateReportTime = 0;
 long lastVentStateReportTime = 0;
 
-// Turn on the vent afer 5 minutes of heater running time
+// Turn on the vent afer 4 minutes of heater running time
 
-int vent_on_time_sec = 300;
+int vent_on_time_sec = 240;
 int vent_state = 0;
 int switch_on_request = 0;
 int switch_off_request = 1;
 int intensity_request = 0;
 int knob_request = 0;
 int mqtt_servo_angle = 0;
-
+int prev_mqtt_servo_angle = 0;
 
 int intensity = 0;
 int prev_intensity = 0;

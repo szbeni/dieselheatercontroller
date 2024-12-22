@@ -53,36 +53,72 @@ void servo_loop()
   static long last_quick_run = 0;
   static long heater_on_counter = 0;
   static float on_percent = 0;
+  static float on_percent_prev = 0;
   static float last_servo_angle = 0;
+  static int servo_detached = 0;
+  static long last_servo_angle_change_time = now;
 
   if (now - last_quick_run  > 100)
   {
-    //servo.write(mqtt_servo_angle); 
-      if (vent_state == 1)
-      {
-        if(on_percent < 100)
-        {
-          on_percent += 0.5;
-        }
-      }
-      else
-      {
-        if (on_percent > 0)
-        {
-          on_percent -= 0.5;
-        }
-      }
-
-    float servo_angle = VENT_OFF_ANGLE + (float)(VENT_ON_ANGLE - VENT_OFF_ANGLE) * on_percent / 100.0;
-    float diff = fabsf(last_servo_angle - servo_angle);
-    if (diff > 0.4)
+    if (vent_state == 1)
     {
-      last_servo_angle = servo_angle;
-      servo.write(servo_angle); 
-      Serial.print("Servo angle: ");
-      Serial.println(servo_angle);
+      if(on_percent < 100)
+      {
+        on_percent += 0.5;
+      }
     }
-  
+    else
+    {
+      if (on_percent > 0)
+      {
+        on_percent -= 0.5;
+      }
+    }
+
+    int is_demand_changed = 0;
+    float servo_angle = 0;
+    if (on_percent_prev != on_percent)
+    {
+      on_percent_prev = on_percent;
+      servo_angle = VENT_OFF_ANGLE + (float)(VENT_ON_ANGLE - VENT_OFF_ANGLE) * on_percent / 100.0;  
+      is_demand_changed = 1;
+    }
+    if (prev_mqtt_servo_angle != mqtt_servo_angle)
+    {
+      prev_mqtt_servo_angle = mqtt_servo_angle;
+      servo_angle = mqtt_servo_angle;
+      is_demand_changed = 1;
+    }
+
+    if (is_demand_changed == 1)
+    {
+      //Clip the demand
+      if (servo_angle < VENT_OFF_ANGLE)
+        servo_angle = VENT_OFF_ANGLE;
+      else if (servo_angle > VENT_ON_ANGLE)
+        servo_angle = VENT_ON_ANGLE;
+
+      float diff = fabsf(last_servo_angle - servo_angle);
+      if (diff > 0.4)
+      {
+        last_servo_angle_change_time = now;
+        last_servo_angle = servo_angle;
+        servo_detached = 0;
+        servo.attach(PIN_MOTOR_PWM_NUM);
+
+        servo.write(servo_angle); 
+        Serial.print("Servo angle: ");
+        Serial.println(servo_angle);
+      }
+    }
+
+    if ((servo_detached == 0) && (now - last_servo_angle_change_time > 10000))
+    {
+      servo_detached = 1;
+      Serial.println("Servo Detached.");
+      servo.detach();
+    }
+
     last_quick_run = now;
   }
   

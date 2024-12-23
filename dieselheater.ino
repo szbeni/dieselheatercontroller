@@ -46,17 +46,19 @@ int get_diesel_heater_state()
 }
 
 
+static long last_run = 0;
+static long last_quick_run = 0;
+static long heater_on_counter = 0;
+static float on_percent = 0;
+static float on_percent_prev = 0;
+static float last_servo_angle = 0;
+static int servo_detached = 0;
+static long last_servo_angle_change_time = 0;
+
 void servo_loop()
 {
   long now = millis();
-  static long last_run = 0;
-  static long last_quick_run = 0;
-  static long heater_on_counter = 0;
-  static float on_percent = 0;
-  static float on_percent_prev = 0;
-  static float last_servo_angle = 0;
-  static int servo_detached = 0;
-  static long last_servo_angle_change_time = now;
+
 
   if (now - last_quick_run  > 100)
   {
@@ -169,23 +171,25 @@ void servo_loop()
 }
 
 
+static int btn_on_pressed = 0;
+static long btn_on_pressed_time = 0;
+static int switch_on_retry_cntr = 0;
+
+static int btn_off_pressed = 0;
+static long btn_off_pressed_time = 0;
+static int switch_off_retry_cntr = 0;
+
+static int knob_state = 0;
+static long knob_state_time = 0;
+
+static int rot_a_state = 0;
+static int rot_b_state = 0;
+
+static long last_check_intensity_time = 0;
+
 void turn_onoff_request_handler()
 {
-  static int btn_on_pressed = 0;
-  static long btn_on_pressed_time = 0;
-  static int switch_on_retry_cntr = 0;
-  
-  static int btn_off_pressed = 0;
-  static long btn_off_pressed_time = 0;
-  static int switch_off_retry_cntr = 0;
 
-  static int knob_state = 0;
-  static long knob_state_time = 0;
-  
-  static int rot_a_state = 0;
-  static int rot_b_state = 0;
-
-  static long last_check_intensity_time = 0;
   long now = millis();
 
  
@@ -459,20 +463,22 @@ void turn_onoff_request_handler()
 }
 
 
+static int green_led = 0;
+static int green_led_prev = 0;
+static long last_change_green = 0;
+static int green_state = 0;
+static int green_state_prev = 0;
+
+static int red_led = 0;
+static int red_led_prev = 0;
+static long last_change_red = 0;
+static int red_state = 0;
+static int red_state_prev = 0;
+
 void led_state_checker_loop()
 {
   long now = millis();
-  static int green_led = 0;
-  static int green_led_prev = 0;
-  static long last_change_green = 0;
-  static int green_state = 0;
-  static int green_state_prev = 0;
 
-  static int red_led = 0;
-  static int red_led_prev = 0;
-  static long last_change_red = 0;
-  static int red_state = 0;
-  static int red_state_prev = 0;
 
   green_led = !digitalRead(PIN_LED_GREEN);
   red_led = !digitalRead(PIN_LED_RED);

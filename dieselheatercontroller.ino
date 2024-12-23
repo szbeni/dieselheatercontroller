@@ -14,6 +14,7 @@
 #define MQTT_TOPIC_HEATER_STATE  "livingroom/dieselheater/heaterstate"
 #define MQTT_TOPIC_HEATER_INTENSITY  "livingroom/dieselheater/heaterintensity"
 #define MQTT_TOPIC_VENT_STATE  "livingroom/dieselheater/ventstate"
+#define MQTT_TOPIC_SERVO_ANGLE  "livingroom/dieselheater/servoangle"
 #define MQTT_TOPIC_CONNECTION_STATE "livingroom/dieselheater/status"
 #define MQTT_TOPIC_COMMAND "livingroom/dieselheater/cmd/#"
 #define MQTT_CLIENT_ID "dieselheater"

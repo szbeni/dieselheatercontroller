@@ -95,7 +95,6 @@ void mqttOnMessage(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-
 void publishDieselHeaterState()
 {
     lastDieselHeaterStateReportTime = millis();
@@ -111,8 +110,6 @@ void publishDieselHeaterState()
     Serial.println(msg.c_str());
 }
 
-
-
 void publishVentState()
 {
     lastVentStateReportTime = millis();
@@ -120,4 +117,12 @@ void publishVentState()
     Serial.print("Vent state: ");
     Serial.println(msg.c_str());
     mqttClient.publish(MQTT_TOPIC_VENT_STATE, msg.c_str(), true);
+
+    // For some reason this is screwing up the comms_sniffer
+    // memory issues or issue with interrupt?
+    // msg = String(last_servo_angle);
+    // Serial.print("Servo Angle: ");
+    // Serial.println(msg.c_str());
+    // mqttClient.publish(MQTT_TOPIC_SERVO_ANGLE, msg.c_str(), true);
+    
 }

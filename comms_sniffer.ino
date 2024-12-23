@@ -128,15 +128,15 @@ void comms_sniffer_loop()
         if (bits_cntr % 8 == 0 && bits_cntr <= 64)
         {
           
-          //Serial.print("Received: ");
+          Serial.print("Received: ");
           int len = bits_cntr / 8;
           for(int i=0; i<len ; i++)
           {
             data[i] = bits_to_bytes(&bits[i*8]);
-            //sprintf(tmp, "0x%X ", data[i]);
-            //Serial.print(tmp);
+            sprintf(tmp, "0x%X ", data[i]);
+            Serial.print(tmp);
           }
-          //Serial.println("");
+          Serial.println("");
 
 
           if (len == 3 && data[2] & 0x40)
@@ -146,8 +146,8 @@ void comms_sniffer_loop()
         }
         else
         {
-          //Serial.print("Error number of bits received: ");
-          //Serial.println(bits_cntr);
+          Serial.print("Error number of bits received: ");
+          Serial.println(bits_cntr);
         }
         bits_cntr = 0;
       }
